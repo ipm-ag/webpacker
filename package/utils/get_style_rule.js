@@ -1,35 +1,35 @@
 /* eslint global-require: 0 */
 
-const { canProcess, moduleExists } = require('./helpers')
+const { canProcess, moduleExists } = require("./helpers");
 
 const getStyleRule = (test, preprocessors = []) => {
-  if (moduleExists('css-loader')) {
+  if (moduleExists("css-loader")) {
     const tryPostcss = () =>
-      canProcess('postcss-loader', (loaderPath) => ({
+      canProcess("postcss-loader", (loaderPath) => ({
         loader: loaderPath,
-        options: { sourceMap: true }
-      }))
+        options: { sourceMap: false },
+      }));
 
     const use = [
-      { loader: require('mini-css-extract-plugin').loader },
+      { loader: require("mini-css-extract-plugin").loader },
       {
-        loader: require.resolve('css-loader'),
+        loader: require.resolve("css-loader"),
         options: {
-          sourceMap: true,
-          importLoaders: 2
-        }
+          sourceMap: false,
+          importLoaders: 2,
+        },
       },
       tryPostcss(),
-      ...preprocessors
-    ].filter(Boolean)
+      ...preprocessors,
+    ].filter(Boolean);
 
     return {
       test,
-      use
-    }
+      use,
+    };
   }
 
-  return null
-}
+  return null;
+};
 
-module.exports = getStyleRule
+module.exports = getStyleRule;
